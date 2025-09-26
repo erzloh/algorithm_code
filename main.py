@@ -60,8 +60,7 @@ class MyAI():
             new_board = self.result(board, action)
             # if self.is_terminal(new_board) and self.end_value == 1:
             #     return (action[1], action[2])
-            current = self.alpha_beta_minimax(new_board, False, 0, 3, alpha=-math.inf, beta=math.inf)
-            # print("Action :", action, "Score :", current, "\n\n")
+            current = self.alpha_beta_minimax(new_board, False, 0, 3)         # print("Action :", action, "Score :", current, "\n\n")
             if current > best_score:
                 best_score = current
                 best_move = (action[1], action[2])
@@ -156,15 +155,15 @@ class MyAI():
 			# Example values : [-1, 1, 0, 2]
             values = [board[x][y][z] for (x,y,z) in line]
 			
-            if values.count(self.player) == 3 and values.count(0) == 1:
-                score += 100
-            elif values.count(self.player) == 2 and values.count(0) == 2:
-                score += 10
+            # if values.count(self.player) == 3 and values.count(0) == 1:
+            #     score += 100
+            # elif values.count(self.player) == 2 and values.count(0) == 2:
+            #     score += 10
 
-            if values.count(enemy) == 3 and values.count(0) == 1:
-                score -= 100
-            elif values.count(enemy) == 2 and values.count(0) == 2:
-                score -= 10
+            # if values.count(enemy) == 3 and values.count(0) == 1:
+            #     score -= 100
+            # elif values.count(enemy) == 2 and values.count(0) == 2:
+            #     score -= 10
 
         # Position Weight
         for x in range(4):
@@ -189,13 +188,13 @@ class MyAI():
                 # print("Row i :", row_i)
                 for space_i in range(4):
                     if board[plane_i][row_i][space_i] == 0 \
-                        and (plane_i == 0 \
+                        and (plane_i == 0
                         or board[plane_i - 1][row_i][space_i] > 0 ):
 
                         action_arr.append((plane_i, row_i, space_i))
         return action_arr
 
-    def alpha_beta_minimax(self, board, isMaximiser, depth, max_depth, alpha, beta):
+    def alpha_beta_minimax(self, board, isMaximiser, depth, max_depth):
         """
             isMaximiser: is the computer turn to check in the three
             depth: how far in the three you are
@@ -208,21 +207,16 @@ class MyAI():
             max_eval = -math.inf
             for action in self.legal_move(board):
                 new_board = self.result(board, action, isMaximiser=True)
-                eval = self.alpha_beta_minimax(new_board, False, depth + 1, max_depth, alpha, beta)
+                eval = self.alpha_beta_minimax(new_board, False, depth + 1, max_depth)
                 max_eval = max(max_eval, eval)
-                alpha = max(alpha, eval)
-                if beta <= alpha:
-                    break
             return max_eval
         else:
             min_eval = math.inf
             for action in self.legal_move(board):
                 new_board = self.result(board, action, isMaximiser=False)
-                eval = self.alpha_beta_minimax(new_board, True, depth + 1, max_depth, alpha, beta)
+                eval = self.alpha_beta_minimax(new_board, True, depth + 1, max_depth)
                 min_eval = min(min_eval, eval)
-                beta = min(beta, eval)
-                if beta <= alpha:
-                    break
+                
             return min_eval
 
 
