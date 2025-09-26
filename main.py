@@ -151,13 +151,13 @@ class MyAI():
             depth: how far in the three you are
             max_deth: maximmum depth
         """
-        if depth == 0 or self.is_terminal(board) or depth == max_depth:
+        if self.is_terminal(board) or depth == max_depth:
             return self.evaluate(board)
 
         if isMaximiser:
             max_eval = -math.inf
             for action in self.legal_move(board):
-                eval = self.alpha_beta_minimax(self.result(board, action), False, depth - 1, max_depth, alpha, beta)
+                eval = self.alpha_beta_minimax(self.result(board, action), False, depth + 1, max_depth, alpha, beta)
                 max_eval = max(max_eval, eval)
                 alpha = max(alpha, eval)
                 if beta <= alpha:
@@ -166,8 +166,8 @@ class MyAI():
         else:
             min_eval = math.inf
             for action in self.legal_move(board):
-                eval = self.alpha_beta_minimax(self.result(board, action), True, depth - 1, max_depth, alpha, beta)
-                min_eval = min(max_eval, eval)
+                eval = self.alpha_beta_minimax(self.result(board, action), True, depth + 1, max_depth, alpha, beta)
+                min_eval = min(min_eval, eval)
                 beta = min(beta, eval)
                 if beta <= alpha:
                     break
