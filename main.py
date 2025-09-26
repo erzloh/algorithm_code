@@ -158,14 +158,14 @@ class MyAI(Alg3D):
             values = [board[x][y][z] for (x,y,z) in line]
 			
             if values.count(self.player) == 3 and values.count(0) == 1:
-                score += 100
+                score += 200
             elif values.count(self.player) == 2 and values.count(0) == 2:
-                score += 10
+                score += 20
 
-            # if values.count(enemy) == 3 and values.count(0) == 1:
-            #     score -= 100
-            # elif values.count(enemy) == 2 and values.count(0) == 2:
-            #     score -= 10
+            if values.count(enemy) == 3 and values.count(0) == 1:
+                score -= 300
+            elif values.count(enemy) == 2 and values.count(0) == 2:
+                score -= 40
 
         # Position Weight
         # for x in range(4):
