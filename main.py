@@ -60,7 +60,7 @@ class MyAI(Alg3D):
             new_board = self.result(board, action)
             if self.is_terminal(new_board) and self.end_value == 1:
                 return (action[1], action[2])
-            current = self.alpha_beta_minimax(new_board, False, 0, 8, alpha=-math.inf, beta=math.inf)
+            current = self.alpha_beta_minimax(new_board, False, 0, 5, alpha=-math.inf, beta=math.inf)
             # print("Action :", action, "Score :", current, "\n\n")
             if current > best_score:
                 best_score = current
@@ -157,10 +157,10 @@ class MyAI(Alg3D):
 			# Example values : [-1, 1, 0, 2]
             values = [board[x][y][z] for (x,y,z) in line]
 			
-            # if values.count(self.player) == 3 and values.count(0) == 1:
-            #     score += 100
-            # elif values.count(self.player) == 2 and values.count(0) == 2:
-            #     score += 10
+            if values.count(self.player) == 3 and values.count(0) == 1:
+                score += 100
+            elif values.count(self.player) == 2 and values.count(0) == 2:
+                score += 10
 
             # if values.count(enemy) == 3 and values.count(0) == 1:
             #     score -= 100
