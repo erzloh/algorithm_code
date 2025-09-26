@@ -159,7 +159,7 @@ class MyAI():
         if isMaximiser:
             max_eval = -math.inf
             for action in self.legal_move(board):
-                new_board = self.result(board, action, current_player)
+                new_board = self.result(board, action)
                 eval = self.alpha_beta_minimax(new_board, False, depth + 1, max_depth, alpha, beta)
                 max_eval = max(max_eval, eval)
                 alpha = max(alpha, eval)
@@ -169,7 +169,7 @@ class MyAI():
         else:
             min_eval = math.inf
             for action in self.legal_move(board):
-                new_board = self.result(board, action, current_player)
+                new_board = self.result(board, action)
                 eval = self.alpha_beta_minimax(new_board, True, depth + 1, max_depth, alpha, beta)
                 min_eval = min(min_eval, eval)
                 beta = min(beta, eval)
