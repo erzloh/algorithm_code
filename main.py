@@ -77,9 +77,8 @@ class MyAI(Alg3D):
             return new board
         """ 
         # Create a deep copy of the board
-        new_board = [[[board[x][y][z] for z in range(4)] for y in range(4)] for x in range(4)]
-        new_board[action[0]][action[1]][action[2]] = self.player if isMaximiser else (1 if self.player == 2 else 2)
-        return new_board
+        board[action[0]][action[1]][action[2]] = self.player if isMaximiser else (1 if self.player == 2 else 2)
+        return board
 
     def generate_lines(self):
         lines = []
