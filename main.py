@@ -22,7 +22,7 @@ class MyAI():
         self.player = player
         # print("Board state at start of get_move: ", board)
         # HERE OPTIMISE
-        best_score = 0
+        best_score = -math.inf
         best_move = (0, 0)
         # print("Legal moves :", self.legal_move(board))
         for action in self.legal_move(board):
@@ -33,7 +33,7 @@ class MyAI():
             new_board = self.result(board, action)
             # if self.is_terminal(new_board) and self.end_value == 1:
             #     return (action[1], action[2])
-            current = self.alpha_beta_minimax(new_board, False, 0, 3, alpha=-math.inf, beta=math.inf)
+            current = self.alpha_beta_minimax(new_board, False, 0, 8, alpha=-math.inf, beta=math.inf)
             print("Action :", action, "Score :", current, "\n\n")
             if current > best_score:
                 best_score = current
@@ -97,19 +97,19 @@ class MyAI():
                 print("line :", line)
                 self.over = True
                 self.end_value = 1
-                print("You WIN")
+                # print("You WIN")
 
                 return True
             elif all(board[x][y][z] == enemy for (x,y,z) in line):
                 self.over = True
                 self.end_value = -1
-                print("You lose")
+                # print("You lose")
                 return True
         # if board is full
         if all(board[3][y][x] != 0 for x in range(4) for y in range(4)):
             self.over = True
             self.end_value = 0
-            print("Draw")
+            # print("Draw")
         return self.over
 
 
