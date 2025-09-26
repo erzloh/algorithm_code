@@ -77,8 +77,7 @@ class MyAI(Alg3D):
             return new board
         """ 
         # Create a deep copy of the board
-        # new_board = [[[board[x][y][z] for z in range(4)] for y in range(4)] for x in range(4)]
-        new_board = board.copy()
+        new_board = [[[board[x][y][z] for z in range(4)] for y in range(4)] for x in range(4)]
         new_board[action[0]][action[1]][action[2]] = self.player if isMaximiser else (1 if self.player == 2 else 2)
         return new_board
 
@@ -132,8 +131,8 @@ class MyAI(Alg3D):
                 self.end_value = -1
                 # print("You lose")
                 return True
-        # if board is full
-        if all(board[3][y][x] != 0 for x in range(4) for y in range(4)):
+        # if board is full (check top layer)
+        if all(board[x][y][3] != 0 for x in range(4) for y in range(4)):
             self.over = True
             self.end_value = 0
             return False
@@ -152,29 +151,29 @@ class MyAI(Alg3D):
         if self.over:
             return self.end_value * 10000
         # Heuristic scoring
-        # for line in self.lines:
-		# 	# Example line : [(0,0,0), (1,1,1), (2,2,2), (3,3,3)]
-		# 	# Example values : [-1, 1, 0, 2]
-        #     values = [board[x][y][z] for (x,y,z) in line]
+        for line in self.lines:
+            # Example line : [(0,0,0), (1,1,1), (2,2,2), (3,3,3)]
+            # Example values : [-1, 1, 0, 2]
+            values = [board[x][y][z] for (x,y,z) in line]
 			
-        #     if values.count(self.player) == 3 and values.count(0) == 1:
-        #         score += 5
-        #     elif values.count(self.player) == 2 and values.count(0) == 2:
-        #         score += 2
+            if values.count(self.player) == 3 and values.count(0) == 1:
+                score += 100
+            elif values.count(self.player) == 2 and values.count(0) == 2:
+                score += 10
 
-        #     if values.count(enemy) == 3 and values.count(0) == 1:
-        #         score -= 5
-        #     elif values.count(enemy) == 2 and values.count(0) == 2:
-        #         score -= 2
+            if values.count(enemy) == 3 and values.count(0) == 1:
+                score -= 100
+            elif values.count(enemy) == 2 and values.count(0) == 2:
+                score -= 10
 
         # Position Weight
-        # for x in range(4):
-        #     for y in range(4):
-        #         for z in range(4):
-        #             if board[x][y][z] == self.player:
-        #                 score += self.position_weights[z][x][y]
-        #             elif board[x][y][z] == enemy:
-        #                 score -= self.position_weights[z][x][y]
+        for x in range(4):
+            for y in range(4):
+                for z in range(4):
+                    if board[x][y][z] == self.player:
+                        score += self.position_weights[z][x][y]
+                    elif board[x][y][z] == enemy:
+                        score -= self.position_weights[z][x][y]
 
         return score
 
@@ -184,16 +183,14 @@ class MyAI(Alg3D):
         """
         action_arr = []
 
-        for plane_i in range(4):
-            # print("Plane i :", plane_i)
-            for row_i in range(4):
-                # print("Row i :", row_i)
-                for space_i in range(4):
-                    if board[plane_i][row_i][space_i] == 0 \
-                        and (plane_i == 0 \
-                        or board[plane_i - 1][row_i][space_i] > 0 ):
+        for x in range(4):
+            for y in range(4):
+                for z in range(4):
+                    if board[x][y][z] == 0 \
+                        and (z == 0 \
+                        or board[x][y][z - 1] > 0 ):
 
-                        action_arr.append((plane_i, row_i, space_i))
+                        action_arr.append((x, y, z))
         return action_arr
 
     def alpha_beta_minimax(self, board, isMaximiser, depth, max_depth, alpha, beta):
