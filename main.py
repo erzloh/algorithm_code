@@ -166,13 +166,13 @@ class MyAI():
             #     score -= 10
 
         # Position Weight
-        for x in range(4):
-            for y in range(4):
-                for z in range(4):
-                    if board[x][y][z] == self.player:
-                        score += self.position_weights[z][x][y]
-                    elif board[x][y][z] == enemy:
-                        score -= self.position_weights[z][x][y]
+        # for x in range(4):
+        #     for y in range(4):
+        #         for z in range(4):
+        #             if board[x][y][z] == self.player:
+        #                 score += self.position_weights[z][x][y]
+        #             elif board[x][y][z] == enemy:
+        #                 score -= self.position_weights[z][x][y]
 
         return score
 
