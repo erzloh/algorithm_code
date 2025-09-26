@@ -150,7 +150,7 @@ class MyAI(Alg3D):
         score = 0
 
         if self.over:
-            return self.end_value * 1000
+            return self.end_value * 10000
         # Heuristic scoring
         for line in self.lines:
 			# Example line : [(0,0,0), (1,1,1), (2,2,2), (3,3,3)]
@@ -158,14 +158,14 @@ class MyAI(Alg3D):
             values = [board[x][y][z] for (x,y,z) in line]
 			
             if values.count(self.player) == 3 and values.count(0) == 1:
-                score += 200
+                score += 5
             elif values.count(self.player) == 2 and values.count(0) == 2:
-                score += 20
+                score += 2
 
             if values.count(enemy) == 3 and values.count(0) == 1:
-                score -= 300
+                score -= 5
             elif values.count(enemy) == 2 and values.count(0) == 2:
-                score -= 40
+                score -= 2
 
         # Position Weight
         # for x in range(4):
