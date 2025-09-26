@@ -9,7 +9,7 @@ class MyAI(Alg3D):
         self.lines = self.generate_lines()
         # check if the game is over
         self.over = False
-        self.player = 1
+        self.player = 0
         self.end_value = 0 # 1 if win -1 if lose 0 if
         self.position_weights = [
             [  # z = 0
@@ -51,7 +51,7 @@ class MyAI(Alg3D):
         # HERE OPTIMISE
         best_score = -math.inf
         best_move = (0, 0)
-        print("Legal moves :", self.legal_move(board))
+        # print("Legal moves :", self.legal_move(board))
         for action in self.legal_move(board):
             self.over = False
             self.end_value = 0
@@ -60,11 +60,12 @@ class MyAI(Alg3D):
             new_board = self.result(board, action)
             if self.is_terminal(new_board) and self.end_value == 1:
                 return (action[1], action[2])
-            current = self.alpha_beta_minimax(new_board, False, 0, 1)         # print("Action :", action, "Score :", current, "\n\n")
+            current = self.alpha_beta_minimax(new_board, False, 0, 3, alpha=-math.inf, beta=math.inf)
+            # print("Action :", action, "Score :", current, "\n\n")
             if current > best_score:
                 best_score = current
                 best_move = (action[1], action[2])
-        # print("Best move :", best_move)
+        # # print("Best move :", best_move)
         return best_move
 
     def result(self, board, action, isMaximiser=True):
@@ -121,7 +122,6 @@ class MyAI(Alg3D):
 
 
             if all(board[x][y][z] == self.player for (x,y,z) in line):
-                # print("line :", line)
                 self.over = True
                 self.end_value = 1
                 # print("You WIN")
@@ -136,8 +136,9 @@ class MyAI(Alg3D):
         if all(board[3][y][x] != 0 for x in range(4) for y in range(4)):
             self.over = True
             self.end_value = 0
+            return False
             # print("Draw")
-        return self.over
+        return False
 
 
     def evaluate(self, board):
@@ -189,13 +190,13 @@ class MyAI(Alg3D):
                 # print("Row i :", row_i)
                 for space_i in range(4):
                     if board[plane_i][row_i][space_i] == 0 \
-                        and (plane_i == 0
+                        and (plane_i == 0 \
                         or board[plane_i - 1][row_i][space_i] > 0 ):
 
                         action_arr.append((plane_i, row_i, space_i))
         return action_arr
 
-    def alpha_beta_minimax(self, board, isMaximiser, depth, max_depth):
+    def alpha_beta_minimax(self, board, isMaximiser, depth, max_depth, alpha, beta):
         """
             isMaximiser: is the computer turn to check in the three
             depth: how far in the three you are
@@ -208,16 +209,21 @@ class MyAI(Alg3D):
             max_eval = -math.inf
             for action in self.legal_move(board):
                 new_board = self.result(board, action, isMaximiser=True)
-                eval = self.alpha_beta_minimax(new_board, False, depth + 1, max_depth)
+                eval = self.alpha_beta_minimax(new_board, False, depth + 1, max_depth, alpha, beta)
                 max_eval = max(max_eval, eval)
+                alpha = max(alpha, eval)
+                if beta <= alpha:
+                    break
             return max_eval
         else:
             min_eval = math.inf
             for action in self.legal_move(board):
                 new_board = self.result(board, action, isMaximiser=False)
-                eval = self.alpha_beta_minimax(new_board, True, depth + 1, max_depth)
+                eval = self.alpha_beta_minimax(new_board, True, depth + 1, max_depth, alpha, beta)
                 min_eval = min(min_eval, eval)
-                
+                beta = min(beta, eval)
+                if beta <= alpha:
+                    break
             return min_eval
 
 
