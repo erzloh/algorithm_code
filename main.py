@@ -11,6 +11,33 @@ class MyAI():
         self.over = False
         self.player = 1
         self.end_value = 0 # 1 if win -1 if lose 0 if
+        self.position_weights = [
+            [  # z = 0
+                [3, 4, 4, 3],
+                [4, 6, 6, 4],
+                [4, 6, 6, 4],
+                [3, 4, 4, 3]
+            ],
+            [  # z = 1
+                [4, 6, 6, 4],
+                [6, 8, 8, 6],
+                [6, 8, 8, 6],
+                [4, 6, 6, 4]
+            ],
+            [  # z = 2
+                [4, 6, 6, 4],
+                [6, 8, 8, 6],
+                [6, 8, 8, 6],
+                [4, 6, 6, 4]
+            ],
+            [  # z = 3
+                [3, 4, 4, 3],
+                [4, 6, 6, 4],
+                [4, 6, 6, 4],
+                [3, 4, 4, 3]
+            ]
+        ]
+
     
     def get_move(
         self,
@@ -138,6 +165,15 @@ class MyAI():
                 score -= 100
             elif values.count(enemy) == 2 and values.count(0) == 2:
                 score -= 10
+
+        # Position Weight
+        for x in range(4):
+            for y in range(4):
+                for z in range(4):
+                    if board[x][y][z] == self.player:
+                        score += self.position_weights[z][x][y]
+                    elif board[x][y][z] == enemy:
+                        score -= self.position_weights[z][x][y]
 
         return score
 
