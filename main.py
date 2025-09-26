@@ -1,9 +1,9 @@
 from typing import List, Tuple
 #from local_driver import Alg3D, Board # ローカル検証用
-# from framework import Alg3D, Board # 本番用
+from framework import Alg3D, Board # 本番用
 import math
 
-class MyAI():
+class MyAI(Alg3D):
     def __init__(self):
         # all possible winning lines
         self.lines = self.generate_lines()
@@ -150,10 +150,10 @@ class MyAI():
         if self.over:
             return self.end_value * 1000
         # Heuristic scoring
-        for line in self.lines:
+        # for line in self.lines:
 			# Example line : [(0,0,0), (1,1,1), (2,2,2), (3,3,3)]
 			# Example values : [-1, 1, 0, 2]
-            values = [board[x][y][z] for (x,y,z) in line]
+            # values = [board[x][y][z] for (x,y,z) in line]
 			
             # if values.count(self.player) == 3 and values.count(0) == 1:
             #     score += 100

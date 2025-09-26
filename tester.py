@@ -30,15 +30,17 @@ def main():
         # if ai.is_terminal(board):
         #     print("Game Overaaa")
         #     break
-        random = add_random_move(board)
-        board = add_move(random, board, 2)
+        
         # if ai.is_terminal(board):
         #     print("Game Over2")
         #     break
         result = ai.get_move(board, 1, [0, 0])
         
-        print(f"enemy: {random}  AI : {result}")  # Expected output:
         board = add_move(result, board, 1)
+        random = add_random_move(board)
+        board = add_move(random, board, 2)
+        print(f"enemy: {random}  AI : {result}")  # Expected output:
+
         
     
     print("New board after AI move:", board)
