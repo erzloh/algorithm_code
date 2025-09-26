@@ -1,6 +1,6 @@
 from typing import List, Tuple
-#from local_driver import Alg3D, Board # ローカル検証用
-from framework import Alg3D, Board # 本番用
+from local_driver import Alg3D, Board # ローカル検証用
+# from framework import Alg3D, Board # 本番用
 import math
 
 class MyAI(Alg3D):
@@ -51,7 +51,7 @@ class MyAI(Alg3D):
         # HERE OPTIMISE
         best_score = -math.inf
         best_move = (0, 0)
-        # print("Legal moves :", self.legal_move(board))
+        print("Legal moves :", self.legal_move(board))
         for action in self.legal_move(board):
             self.over = False
             self.end_value = 0
