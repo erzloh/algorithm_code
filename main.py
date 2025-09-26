@@ -9,7 +9,7 @@ class MyAI():
         self.lines = self.generate_lines()
         # check if the game is over
         self.over = False
-        self.player = 0
+        self.player = 1
         self.end_value = 0 # 1 if win -1 if lose 0 if
     
     def get_move(
@@ -20,24 +20,28 @@ class MyAI():
     ) -> Tuple[int, int]:
         # ここにアルゴリズムを書く
         self.player = player
+        # print("Board state at start of get_move: ", board)
         # HERE OPTIMISE
         best_score = 0
         best_move = (0, 0)
         # print("Legal moves :", self.legal_move(board))
         for action in self.legal_move(board):
+            self.over = False
+            self.end_value = 0
             # print("Action :", action)
             # if winning move, play it
             new_board = self.result(board, action)
-            if self.is_terminal(new_board) and self.end_value == 1:
-                return (action[1], action[2])
+            # if self.is_terminal(new_board) and self.end_value == 1:
+            #     return (action[1], action[2])
             current = self.alpha_beta_minimax(new_board, False, 0, 3, alpha=-math.inf, beta=math.inf)
+            print("Action :", action, "Score :", current, "\n\n")
             if current > best_score:
                 best_score = current
                 best_move = (action[1], action[2])
         # print("Best move :", best_move)
         return best_move
 
-    def result(self, board, action):
+    def result(self, board, action, isMaximiser=True):
         """
             return the board that result from a move
             board: current board
@@ -47,7 +51,7 @@ class MyAI():
         """ 
         # Create a deep copy of the board
         new_board = [[[board[x][y][z] for z in range(4)] for y in range(4)] for x in range(4)]
-        new_board[action[0]][action[1]][action[2]] = self.player
+        new_board[action[0]][action[1]][action[2]] = self.player if isMaximiser else (1 if self.player == 2 else 2)
         return new_board
 
     def generate_lines(self):
@@ -87,18 +91,25 @@ class MyAI():
         """
         enemy = 1 if self.player == 2 else 2
         for line in self.lines:
+
+
             if all(board[x][y][z] == self.player for (x,y,z) in line):
+                print("line :", line)
                 self.over = True
                 self.end_value = 1
+                print("You WIN")
+
                 return True
             elif all(board[x][y][z] == enemy for (x,y,z) in line):
                 self.over = True
                 self.end_value = -1
+                print("You lose")
                 return True
         # if board is full
-        if all(board[x][y][3] != 0 for x in range(4) for y in range(4)):
+        if all(board[3][y][x] != 0 for x in range(4) for y in range(4)):
             self.over = True
             self.end_value = 0
+            print("Draw")
         return self.over
 
 
@@ -137,9 +148,9 @@ class MyAI():
         action_arr = []
 
         for plane_i in range(4):
-            print("Plane i :", plane_i)
+            # print("Plane i :", plane_i)
             for row_i in range(4):
-                print("Row i :", row_i)
+                # print("Row i :", row_i)
                 for space_i in range(4):
                     if board[plane_i][row_i][space_i] == 0 \
                         and (plane_i == 0 \
@@ -160,7 +171,7 @@ class MyAI():
         if isMaximiser:
             max_eval = -math.inf
             for action in self.legal_move(board):
-                new_board = self.result(board, action)
+                new_board = self.result(board, action, isMaximiser=True)
                 eval = self.alpha_beta_minimax(new_board, False, depth + 1, max_depth, alpha, beta)
                 max_eval = max(max_eval, eval)
                 alpha = max(alpha, eval)
@@ -170,7 +181,7 @@ class MyAI():
         else:
             min_eval = math.inf
             for action in self.legal_move(board):
-                new_board = self.result(board, action)
+                new_board = self.result(board, action, isMaximiser=False)
                 eval = self.alpha_beta_minimax(new_board, True, depth + 1, max_depth, alpha, beta)
                 min_eval = min(min_eval, eval)
                 beta = min(beta, eval)
