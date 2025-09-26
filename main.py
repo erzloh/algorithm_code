@@ -1,6 +1,6 @@
 from typing import List, Tuple
-from local_driver import Alg3D, Board # ローカル検証用
-# from framework import Alg3D, Board # 本番用
+# from local_driver import Alg3D, Board # ローカル検証用
+from framework import Alg3D, Board # 本番用
 import math
 
 class MyAI(Alg3D):
@@ -60,7 +60,7 @@ class MyAI(Alg3D):
             new_board = self.result(board, action)
             # if self.is_terminal(new_board) and self.end_value == 1:
             #     return (action[1], action[2])
-            current = self.alpha_beta_minimax(new_board, False, 0, 3)         # print("Action :", action, "Score :", current, "\n\n")
+            current = self.alpha_beta_minimax(new_board, False, 0, 1)         # print("Action :", action, "Score :", current, "\n\n")
             if current > best_score:
                 best_score = current
                 best_move = (action[1], action[2])
@@ -76,7 +76,8 @@ class MyAI(Alg3D):
             return new board
         """ 
         # Create a deep copy of the board
-        new_board = [[[board[x][y][z] for z in range(4)] for y in range(4)] for x in range(4)]
+        # new_board = [[[board[x][y][z] for z in range(4)] for y in range(4)] for x in range(4)]
+        new_board = board.copy()
         new_board[action[0]][action[1]][action[2]] = self.player if isMaximiser else (1 if self.player == 2 else 2)
         return new_board
 
