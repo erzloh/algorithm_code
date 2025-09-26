@@ -23,9 +23,9 @@ class MyAI():
         # HERE OPTIMISE
         best_score = 0
         best_move = (0, 0)
-        print("Legal moves :", self.legal_move(board))
+        # print("Legal moves :", self.legal_move(board))
         for action in self.legal_move(board):
-            print("Action :", action)
+            # print("Action :", action)
             # if winning move, play it
             new_board = self.result(board, action)
             if self.is_terminal(new_board) and self.end_value == 1:
@@ -34,7 +34,7 @@ class MyAI():
             if current > best_score:
                 best_score = current
                 best_move = (action[1], action[2])
-        print("Best move :", best_move)
+        # print("Best move :", best_move)
         return best_move
 
     def result(self, board, action):
